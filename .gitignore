@@ -1,0 +1,8 @@
+CHANGELOG.md
+Gemfile
+gradle.properties
+logstash-filter-guardium_snowflake_filter.gemspec
+*.gem
+.gradle/
+build/
+vendor/
