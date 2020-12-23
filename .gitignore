@@ -6,3 +6,7 @@ logstash-filter-guardium_snowflake_filter.gemspec
 .gradle/
 build/
 vendor/
+.classpath
+.project
+.settings/org.eclipse.buildship.core.prefs
+.settings/org.eclipse.jdt.core.prefs
