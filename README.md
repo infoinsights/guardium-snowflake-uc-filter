@@ -1,2 +1,2 @@
-# guardium-snowflake-uc-filter
-A Guardium Universal Connector input plugin for Snowflake
+# Guardium Snowflake Connector
+A Guardium Universal Connector filter plugin for Snowflake.
