@@ -65,7 +65,7 @@ You are encouraged to test this first by replacing :sql_last_value with a string
 this against Snowflake with the user in question.
 
 
-The configuration for the Snowflake filter is simpler:
+The configuration for the Snowflake filter plugin is simpler:
 ```ruby
 guardium_snowflake_filter{
 }
