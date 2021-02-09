@@ -38,26 +38,25 @@ jdbc {
         jdbc_validate_connection => true
         jdbc_driver_class => "Java::net.snowflake.client.jdbc.SnowflakeDriver"
         jdbc_driver_library => "/usr/share/logstash/third_party/snowflake-jdbc-<driver version>.jar"
-		use_column_value  => true
-		tracking_column_type => "timestamp"
-		last_run_metadata_path => "/usr/share/logstash/third_party/metadata"
-		record_last_run => true
-		schedule =>  "* * * * *" 
-		tracking_column => "end_time"
-		plugin_timezone => "local"
-	    add_field => {"server_host_name" => "<account>.<region>.<provider>.snowflakecomputing.com"}
+	use_column_value  => true
+	tracking_column_type => "timestamp"
+	last_run_metadata_path => "/usr/share/logstash/third_party/metadata"
+	record_last_run => true
+	schedule =>  "* * * * *" 
+	tracking_column => "end_time"
+	plugin_timezone => "local"
+	add_field => {"server_host_name" => "<account>.<region>.<provider>.snowflakecomputing.com"}
         statement => "
-		select *
-		from table(
-                        information_schema.query_history(
-                                RESULT_LIMIT => 10000,
-                                END_TIME_RANGE_START => to_timestamp_ltz(:sql_last_value || ' -0000')
-                        )
-                  )
+	select * from table(
+                      information_schema.query_history(
+                      RESULT_LIMIT => 10000,
+                      END_TIME_RANGE_START => to_timestamp_ltz(:sql_last_value || ' -0000')
+               )
+        )
         where execution_status <> 'RUNNING'
-		AND end_time > :sql_last_value  || ' -0000'
-		ORDER BY END_TIME
-		"
+	AND end_time > :sql_last_value  || ' -0000'
+	ORDER BY END_TIME
+	"
     }
 ```
 The user you define in jdbc_user must have enough permissions to execute the SQL in statement area.
@@ -81,7 +80,7 @@ can provide is limitted by what Snowflake keeps track of in its audit logs.
 3. Source Programs are not reported because they are not part of the Snowflake audit stream
 4. "Server Type" will be set correctly by the Snowflake plugin, but Guardium will revert the type to "UNKNOWN" because it asks Guardium to parse the SQL. We're working with IBM to see if that limtiation can be changed. In the meantime DB Protocol does provide an indicator that the DB type is Snowflake
 5. We made the decision to populate "OS User" with the current user's role in Snowflake as that might be useful information. Unfortuantely Guardium's Universal Connector functionality does not seem to populate that field yet
-6. The Snowflake filter plugin does not implement its own SQL parser and instead asks Guardium to parse the SQL. Becuase of that, if there is a Snowflake-specific SQL statement type that Guardium does not recognize, the statement may not be displayed correctly.
+6. The Snowflake filter plugin does not implement its own SQL parser and instead asks Guardium to parse the SQL. Because of that, if there is a Snowflake-specific SQL statement type that Guardium does not recognize, the statement may not be displayed correctly.
 
 
 
