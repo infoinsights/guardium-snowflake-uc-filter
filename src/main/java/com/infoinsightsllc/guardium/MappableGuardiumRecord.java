@@ -1,12 +1,13 @@
 package com.infoinsightsllc.guardium;
 
-import com.ibm.guardium.universalconnector.common.structures.Accessor;
-import com.ibm.guardium.universalconnector.common.structures.Construct;
-import com.ibm.guardium.universalconnector.common.structures.Data;
-import com.ibm.guardium.universalconnector.common.structures.ExceptionRecord;
-import com.ibm.guardium.universalconnector.common.structures.Record;
-import com.ibm.guardium.universalconnector.common.structures.SessionLocator;
-import com.ibm.guardium.universalconnector.common.structures.Time;
+import com.ibm.guardium.universalconnector.commons.structures.Accessor;
+import com.ibm.guardium.universalconnector.commons.structures.Construct;
+import com.ibm.guardium.universalconnector.commons.structures.Data;
+import com.ibm.guardium.universalconnector.commons.structures.ExceptionRecord;
+import com.ibm.guardium.universalconnector.commons.structures.Record;
+import com.ibm.guardium.universalconnector.commons.structures.SessionLocator;
+import com.ibm.guardium.universalconnector.commons.structures.Time;
+
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -47,11 +48,13 @@ public class MappableGuardiumRecord {
         mapSessionLocator.setServerIp("0.0.0.0");
 
         accessor = new Accessor();
+        
         accessor.setDbProtocol(Parser.DATA_PROTOCOL_STRING);
         accessor.setServerType(Parser.SERVER_TYPE_STRING);
         accessor.setServerHostName(Parser.UNKOWN_STRING);
         accessor.setSourceProgram(Parser.UNKOWN_STRING);
-        accessor.setLanguage(Accessor.LANGUAGE_FREE_TEXT_STRING);
+        accessor.setLanguage("MSSQL");
+        
         accessor.setDataType(Accessor.DATA_TYPE_GUARDIUM_SHOULD_PARSE_SQL);
 
         accessor.setClient_mac(Parser.UNKOWN_STRING);

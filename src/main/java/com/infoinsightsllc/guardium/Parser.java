@@ -2,7 +2,7 @@ package com.infoinsightsllc.guardium;
 
 import java.io.IOException;
 import java.util.Map;
-import com.ibm.guardium.universalconnector.common.structures.*;
+import com.ibm.guardium.universalconnector.commons.structures.*;
 import co.elastic.logstash.api.Event;
 
 public class Parser {
