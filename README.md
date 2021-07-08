@@ -78,7 +78,7 @@ can provide is limitted by what Snowflake keeps track of in its audit logs.
 2. Client IPs are not reported because they are not part of the Snowflake audit stream
 3. Server IPs are also not reported because they are not part of the audit stream. That said, the "add_field" clause in the example shown above adds a user defined Server Host Name that can be used in reports and policies if desired
 3. Source Programs are not reported because they are not part of the Snowflake audit stream
-4. "Server Type" will be set correctly by the Snowflake plugin, but Guardium will revert the type to "UNKNOWN" because it asks Guardium to parse the SQL. We're working with IBM to see if that limtiation can be changed. In the meantime DB Protocol does provide an indicator that the DB type is Snowflake
+4. "Server Type" will be set correctly by the Snowflake plugin, but Guardium will revert the type to "MS SQL SERVER" because it asks Guardium to parse the SQL and requests that the SQL Server dialect be used to handle three-part names better. We're working with IBM to see if that limtiation can be changed. In the meantime DB Protocol does provide an indicator that the DB type is Snowflake
 5. We made the decision to populate "OS User" with the current user's role in Snowflake as that might be useful information. Unfortuantely Guardium's Universal Connector functionality does not seem to populate that field yet
 6. The Snowflake filter plugin does not implement its own SQL parser and instead asks Guardium to parse the SQL. Because of that, if there is a Snowflake-specific SQL statement type that Guardium does not recognize, the statement may not be displayed correctly.
 
