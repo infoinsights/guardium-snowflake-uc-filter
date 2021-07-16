@@ -8,7 +8,7 @@ import co.elastic.logstash.api.Event;
 public class Parser {
     public static final String DATA_PROTOCOL_STRING = "Snowflake native audit";
     public static final String UNKOWN_STRING = "";
-    public static final String SERVER_TYPE_STRING = "Snowflake";
+    public static final String SERVER_TYPE_STRING = "SNOWFLAKE";
     public static final String EXCEPTION_TYPE_AUTHORIZATION_STRING = "SQL_ERROR";
     public static final String EXCEPTION_TYPE_AUTHENTICATION_STRING = "LOGIN_FAILED";
 
