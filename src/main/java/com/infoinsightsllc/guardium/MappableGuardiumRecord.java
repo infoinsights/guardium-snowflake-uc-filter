@@ -142,6 +142,9 @@ public class MappableGuardiumRecord {
             case "query_id":
                 guardRecord.getData().getConstruct().getSentences().get(0).getObjects().get(0).setName("OBJECT NOT PARSED: " + value.toString());
                 break;
+            case "query_tag":
+                guardRecord.setAppUserName(value.toString());
+                break;
             case "query_text":
                 data.setOriginalSqlCommand(value.toString());
                 construct.setFullSql(value.toString());
