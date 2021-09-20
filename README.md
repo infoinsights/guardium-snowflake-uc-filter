@@ -53,15 +53,15 @@ jdbc {
     plugin_timezone => "local"
     add_field => {"server_host_name" => "<id>.<region>.<provider>.snowflakecomputing.com"}
     statement => "
-    	select * from table(
-    					  information_schema.query_history(
-    					  RESULT_LIMIT => 10000,
-    					  END_TIME_RANGE_START => to_timestamp_ltz(:sql_last_value || ' -0000')
-    			   )
-    		)
-    		where execution_status <> 'RUNNING'
-    	AND end_time > :sql_last_value  || ' -0000'
-    	ORDER BY END_TIME
+       select * from table(
+             information_schema.query_history(
+                  RESULT_LIMIT => 10000,
+                  END_TIME_RANGE_START => to_timestamp_ltz(:sql_last_value || ' -0000')
+                )
+       )
+       WHERE execution_status <> 'RUNNING'
+       AND end_time > :sql_last_value  || ' -0000'
+       ORDER BY END_TIME
     "
 }
 
