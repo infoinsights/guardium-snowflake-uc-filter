@@ -2,6 +2,8 @@ package com.infoinsightsllc.guardium;
 
 import com.ibm.guardium.universalconnector.commons.structures.Accessor;
 import com.ibm.guardium.universalconnector.commons.structures.Construct;
+import com.ibm.guardium.universalconnector.commons.structures.Sentence;
+import com.ibm.guardium.universalconnector.commons.structures.SentenceObject;
 import com.ibm.guardium.universalconnector.commons.structures.Data;
 import com.ibm.guardium.universalconnector.commons.structures.ExceptionRecord;
 import com.ibm.guardium.universalconnector.commons.structures.Record;
@@ -53,7 +55,7 @@ public class MappableGuardiumRecord {
         accessor.setServerType(Parser.SERVER_TYPE_STRING);
         accessor.setServerHostName(Parser.UNKOWN_STRING);
         accessor.setSourceProgram(Parser.UNKOWN_STRING);
-        accessor.setLanguage("MSSQL");
+        accessor.setLanguage("SNOWFLAKE");
         
         accessor.setDataType(Accessor.DATA_TYPE_GUARDIUM_SHOULD_PARSE_SQL);
 
@@ -74,6 +76,13 @@ public class MappableGuardiumRecord {
         construct = new Construct();
         construct.setFullSql(Parser.UNKOWN_STRING);
         construct.setRedactedSensitiveDataSql(Parser.UNKOWN_STRING);
+
+        Sentence sent = new Sentence("NO VERB");
+        construct.getSentences().add(sent);
+
+        SentenceObject so = new SentenceObject("OBJECT NOT PARSED", "");
+        construct.getSentences().get(0).getObjects().add((so));
+
         data.setConstruct(construct);
 
         exceptionRecord = new ExceptionRecord();
@@ -130,6 +139,12 @@ public class MappableGuardiumRecord {
             case "server_host_name":
                 accessor.setServerHostName(value.toString());
                 break;
+            case "query_id":
+                guardRecord.getData().getConstruct().getSentences().get(0).getObjects().get(0).setName("OBJECT NOT PARSED: " + value.toString());
+                break;
+            case "query_tag":
+                guardRecord.setAppUserName(value.toString());
+                break;
             case "query_text":
                 data.setOriginalSqlCommand(value.toString());
                 construct.setFullSql(value.toString());
@@ -143,6 +158,9 @@ public class MappableGuardiumRecord {
                 else{
                     exceptionRecord.setExceptionTypeId(Parser.EXCEPTION_TYPE_AUTHORIZATION_STRING);
                 }
+                break;
+            case "query_type":
+                guardRecord.getData().getConstruct().getSentences().get(0).setVerb(value.toString());
                 break;
             case "error_message":
                 exceptionRecord.setDescription(value.toString());
