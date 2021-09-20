@@ -57,7 +57,7 @@ public class MappableGuardiumRecord {
         accessor.setSourceProgram(Parser.UNKOWN_STRING);
         accessor.setLanguage("SNOWFLAKE");
         
-        accessor.setDataType(Accessor.DATA_TYPE_GUARDIUM_SHOULD_NOT_PARSE_SQL);
+        accessor.setDataType(Accessor.DATA_TYPE_GUARDIUM_SHOULD_PARSE_SQL);
 
         accessor.setClient_mac(Parser.UNKOWN_STRING);
         accessor.setClientHostName(Parser.UNKOWN_STRING);
