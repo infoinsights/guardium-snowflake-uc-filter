@@ -28,6 +28,7 @@ public class MappableGuardiumRecord {
     private Construct construct;
     private ExceptionRecord exceptionRecord;
     private static final int MAX_PORT = 65535;
+    private static final int SERVER_PORT = 443;
 
     public MappableGuardiumRecord() {
         super();
@@ -101,17 +102,14 @@ public class MappableGuardiumRecord {
                 String sessionID = value.toString();
                 guardRecord.setSessionId(sessionID);
 
-                SessionLocator sessionLocator = new SessionLocator();
-                sessionLocator.setClientIpv6(Parser.UNKOWN_STRING);
-                sessionLocator.setServerIpv6(Parser.UNKOWN_STRING);
-                sessionLocator.setClientIp("0.0.0.0");
-                sessionLocator.setServerIp("0.0.0.0");
+                mapSessionLocator.setClientIpv6(Parser.UNKOWN_STRING);
+                mapSessionLocator.setServerIpv6(Parser.UNKOWN_STRING);
+                mapSessionLocator.setServerIp("0.0.0.0");
 
                 long numID = Long.parseLong(sessionID);
-                sessionLocator.setClientPort(Math.toIntExact(numID % MAX_PORT));
-                sessionLocator.setServerPort(Math.toIntExact((numID / MAX_PORT)  % MAX_PORT));
+                mapSessionLocator.setClientPort(Math.toIntExact(numID % MAX_PORT));
+                mapSessionLocator.setServerPort(SERVER_PORT);
 
-                guardRecord.setSessionLocator(sessionLocator);
 
                 break; 
             case "warehouse_name": 
@@ -164,6 +162,12 @@ public class MappableGuardiumRecord {
                 break;
             case "error_message":
                 exceptionRecord.setDescription(value.toString());
+                break;
+            case "client_ip":
+                mapSessionLocator.setClientIp(value.toString());
+                break;
+            case "client_application_id":
+                accessor.setSourceProgram(value.toString());;
                 break;
             default:
                 break;
