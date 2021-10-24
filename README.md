@@ -24,8 +24,8 @@ Once installed, upload a Snowflake JDBC driver as described [here](https://www.i
 
 We have tested with Snowflake JDBC driver V3.9.2. You can file the JDCB driver [here](https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.9.2/).
 
-Next, to prevent Snowflake errors from occurring when querying data that is older than a 
-week, create a file called "metadata" and initialize it to a time that is at a date sooner than a week ago.
+Next, to prevent Snowflake errors from occurring when querying data that is for the entire previous year, create 
+a file called "metadata" and initialize it to a time that is at a date sooner than a week ago.
 Use the following format as an example:
 ```
 --- 2020-12-22 11:23:20.085000000 -00:00
@@ -53,15 +53,15 @@ jdbc {
     plugin_timezone => "local"
     add_field => {"server_host_name" => "<id>.<region>.<provider>.snowflakecomputing.com"}
     statement => "
-       select * from table(
-             information_schema.query_history(
-                  RESULT_LIMIT => 10000,
-                  END_TIME_RANGE_START => to_timestamp_ltz(:sql_last_value || ' -0000')
-                )
-       )
-       WHERE execution_status <> 'RUNNING'
-       AND end_time > :sql_last_value  || ' -0000'
-       ORDER BY END_TIME
+    SELECT * FROM
+       SNOWFLAKE.ACCOUNT_USAGE.query_history QH,
+	   SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY LH,
+	   SNOWFLAKE.ACCOUNT_USAGE.SESSIONS S
+	   WHERE QH.SESSION_ID = S.SESSION_ID 
+       AND LH.EVENT_ID = S.LOGIN_EVENT_ID
+       AND QH.execution_status <> 'RUNNING'
+       AND QH.end_time > :sql_last_value  || ' -0000'
+       ORDER BY QH.END_TIME
     "
 }
 
@@ -69,7 +69,8 @@ jdbc {
 ```
 The user you define in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
 You are encouraged to test this first by replacing :sql_last_value with a string literal and running
-this against Snowflake with the user in question.
+this against Snowflake with the user in question. In particular, make sure the user in question has access
+to [the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html).
 
 
 The configuration for the Snowflake filter plugin is simpler:
@@ -82,11 +83,9 @@ guardium_snowflake_filter{
 This is a list of known issues and limitations. Not all issue are resolvable as the data the connector
 can provide is limitted by what Snowflake keeps track of in its audit logs.
 
-1. Client IPs are not reported because they are not part of the Snowflake audit stream
-2. Server IPs are also not reported because they are not part of the audit stream. That said, the "add_field" clause in the example shown above adds a user defined Server Host Name that can be used in reports and policies if desired
-3. Source Programs are not reported because they are not part of the Snowflake audit stream
-4. "OS User" is also not provided by the Snowflake audit stream, but instead we made the decision to populate "OS User" with the current user's role in Snowflake as that might be useful information
-
+1. Server IPs are also not reported because they are not part of the audit stream. That said, the "add_field" clause in the example shown above adds a user defined Server Host Name that can be used in reports and policies if desired.
+2. "OS User" is not provided by the Snowflake audit stream, but instead we made the decision to populate "OS User" with the current user's role in Snowflake as that might be useful information.
+3. We are using the tables in SNOWFLAKE.ACCOUNT_USAGE above. We do that because it is the only way we know of to join SQL data to informaton on client IPs and source programs. Note though because we are using those tables and not the ones in information_schema, there could be a delay of up to 45 minutes between SQL execution and the data being reflected in the tables and in Guardium as a result.
 
 Author: John Haldeman
 
