@@ -40,7 +40,7 @@ values located in angle brackets.
 jdbc {
     jdbc_connection_string => "jdbc:snowflake://<id>.<region>.<provider>.snowflakecomputing.com/?warehouse=<warehouse>&db=<database>"
     jdbc_user => "<username>"
-    jdbc_password => "<password"
+    jdbc_password => "<password>"
     jdbc_validate_connection => true
     jdbc_driver_class => "Java::net.snowflake.client.jdbc.SnowflakeDriver"
     jdbc_driver_library => "/usr/share/logstash/logstash-core/lib/jars/snowflake-jdbc-3.9.2.jar"
@@ -54,13 +54,14 @@ jdbc {
     add_field => {"server_host_name" => "<id>.<region>.<provider>.snowflakecomputing.com"}
     statement => "
     SELECT * FROM
-       SNOWFLAKE.ACCOUNT_USAGE.query_history QH,
-	   SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY LH,
-	   SNOWFLAKE.ACCOUNT_USAGE.SESSIONS S
-	   WHERE QH.SESSION_ID = S.SESSION_ID 
+      SNOWFLAKE.ACCOUNT_USAGE.query_history QH,
+	    SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY LH,
+	    SNOWFLAKE.ACCOUNT_USAGE.SESSIONS S
+	    WHERE QH.SESSION_ID = S.SESSION_ID 
        AND LH.EVENT_ID = S.LOGIN_EVENT_ID
        AND QH.execution_status <> 'RUNNING'
        AND QH.end_time > :sql_last_value  || ' -0000'
+       AND QH.end_time < DATEADD(HOUR, -1, CURRENT_TIMESTAMP)
        ORDER BY QH.END_TIME
     "
 }
@@ -69,9 +70,13 @@ jdbc {
 ```
 The user you define in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
 You are encouraged to test this first by replacing :sql_last_value with a string literal and running
-this against Snowflake with the user in question. In particular, make sure the user in question has access
-to [the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html).
+this against Snowflake with the user in question. In particular, make sure the user in question [has access
+to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-account-usage-for-other-roles).
 
+```
+use role accountadmin;
+grant imported privileges on database snowflake to role <role>;
+```
 
 The configuration for the Snowflake filter plugin is simpler:
 ```ruby
@@ -85,7 +90,8 @@ can provide is limitted by what Snowflake keeps track of in its audit logs.
 
 1. Server IPs are also not reported because they are not part of the audit stream. That said, the "add_field" clause in the example shown above adds a user defined Server Host Name that can be used in reports and policies if desired.
 2. "OS User" is not provided by the Snowflake audit stream, but instead we made the decision to populate "OS User" with the current user's role in Snowflake as that might be useful information.
-3. We are using the tables in SNOWFLAKE.ACCOUNT_USAGE above. We do that because it is the only way we know of to join SQL data to informaton on client IPs and source programs. Note though because we are using those tables and not the ones in information_schema, there could be a delay of up to 45 minutes between SQL execution and the data being reflected in the tables and in Guardium as a result.
+3. We are using the tables in SNOWFLAKE.ACCOUNT_USAGE above. We do that because it is the only way we know of to join SQL data to informaton on client IPs and source programs. Note though because we are using those tables and not the ones in information_schema, there is a 
+delay of 1 hour between SQL execution and the data being reflected in the tables and in Guardium as a result.
 
 Author: John Haldeman
 
