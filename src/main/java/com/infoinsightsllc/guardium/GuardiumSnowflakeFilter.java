@@ -7,6 +7,8 @@ import co.elastic.logstash.api.Filter;
 import co.elastic.logstash.api.FilterMatchListener;
 import co.elastic.logstash.api.LogstashPlugin;
 import co.elastic.logstash.api.PluginConfigSpec;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import com.ibm.guardium.universalconnector.commons.GuardConstants;
@@ -24,6 +26,8 @@ public class GuardiumSnowflakeFilter implements Filter {
     public static final String LOGSTASH_TAG_JSON_PARSE_ERROR = "_snowflakeguardium_json_parse_error";
     public static final PluginConfigSpec<String> SOURCE_CONFIG =
             PluginConfigSpec.stringSetting("source", "message");
+    
+    public static final String LOGSTASH_TAG_SKIP_NOT_SNOWFLAKE = "_not_snowflake_or_malformed";
 
     private String id;
 
@@ -38,15 +42,23 @@ public class GuardiumSnowflakeFilter implements Filter {
         final Gson gson = builder.create();
 
         Parser parser = new Parser();
+        ArrayList<Event> skippedEvents = new ArrayList<>();
         for (Event event : events) {
             try {
                 Record rec = parser.parseRecord(event);
-                event.setField(GuardConstants.GUARDIUM_RECORD_FIELD_NAME, gson.toJson(rec));
+                if(rec.getAccessor().getDbUser() == null || rec.getAccessor().getDbUser().equals("")){
+                    event.tag(LOGSTASH_TAG_SKIP_NOT_SNOWFLAKE);
+                    skippedEvents.add(event);
+                }
+                else{
+                    event.setField(GuardConstants.GUARDIUM_RECORD_FIELD_NAME, gson.toJson(rec));
+                }
             } catch (Exception exception) {
                 log.error("Snowflake filter: Error parsing event ", exception);
                 event.tag(LOGSTASH_TAG_JSON_PARSE_ERROR);
             }
         }
+        events.removeAll(skippedEvents);
         return events;
     }
 
