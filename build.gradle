@@ -55,19 +55,19 @@ shadowJar {
 
 dependencies {    
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.1'
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'org.apache.logging.log4j:log4j-api:2.9.1'
     compile 'org.apache.logging.log4j:log4j-core:2.9.1'
     compile 'com.google.code.gson:gson:2.8.6'
     compile 'org.jruby:jruby-complete:9.2.7.0'
     compile fileTree(dir: LOGSTASH_CORE_PATH, include: "build/libs/logstash-core-?.?.?.jar")
-    compile fileTree(dir: LOGSTASH_UC_COMMONS_PATH, include: "logstash-uc-commons-1.0-SNAPSHOT.jar")
+    compile fileTree(dir: LOGSTASH_UC_COMMONS_PATH, include: "guardium-universalconnector-commons-1.0.0.jar")
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.jruby:jruby-complete:9.2.7.0'
 
-    testCompile fileTree(dir: LOGSTASH_UC_COMMONS_PATH, include: "logstash-uc-commons-1.0-SNAPSHOT.jar")
+    testCompile fileTree(dir: LOGSTASH_UC_COMMONS_PATH, include: "guardium-universalconnector-commons-1.0.0.jar")
 }
 
 shadowJar{
