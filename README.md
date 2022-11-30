@@ -16,7 +16,7 @@ issues around both parsing and configuring the plugin that have been greatly imp
 This section of the readme outlines the installation process.
 
 ### 1. Install the Plugin
-The first step is to install a plug-in pack that includes this plugin. Instructions on how
+The first step is to install a plug-in pack that includes this plugin. The plugin package can be downloaded from this repository [here](https://github.com/infoinsights/guardium-snowflake-uc-filter/raw/main/logstash-offline-plugins-7.12.1.zip). Instructions on how
 to do so can be found [here](https://www.ibm.com/support/knowledgecenter/SSMPHH_11.3.0/com.ibm.guardium.doc.stap/guc/test_filter_guardium.html).
 
 ### 2. Upload JDBC Driver and Initialize :sql_last_value
