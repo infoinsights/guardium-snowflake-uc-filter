@@ -34,10 +34,23 @@ That should be the only contents of the "metadata" file. Upload it the same way 
 the JDBC driver. It is used later to keep track of the :sql_last_value parameter
 
 ### 3. Configure the Input and Filter Plugins
-Then, configure a JDBC Logstash **input** source using this as a template. Replace all 
+
+Configure a JDBC Logstash **input** source using this as a template. Replace all 
 values located in angle brackets.
+
+**NOTE**: The user you defined below in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
+You are encouraged to test this first by replacing :sql_last_value with a string literal and running
+this against Snowflake with the user in question. In particular, make sure the user in question [has access
+to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-account-usage-for-other-roles).
+
+```
+use role accountadmin;
+grant imported privileges on database snowflake to role <role>;
+```
+
 ```ruby
 jdbc {
+    type => "snowflake"
     jdbc_connection_string => "jdbc:snowflake://<id>.<region>.<provider>.snowflakecomputing.com/?warehouse=<warehouse>&db=<database>"
     jdbc_user => "<username>"
     jdbc_password => "<password>"
@@ -65,24 +78,16 @@ jdbc {
        ORDER BY QH.END_TIME
     "
 }
-
-
-```
-The user you define in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
-You are encouraged to test this first by replacing :sql_last_value with a string literal and running
-this against Snowflake with the user in question. In particular, make sure the user in question [has access
-to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-account-usage-for-other-roles).
-
-```
-use role accountadmin;
-grant imported privileges on database snowflake to role <role>;
 ```
 
 The configuration for the Snowflake filter plugin is simpler:
 ```ruby
-guardium_snowflake_filter{
+if [type] == "snowflake" {
+   guardium_snowflake_filter{
+   }
 }
 ```
+
 
 ## Known Issues and Limitations
 This is a list of known issues and limitations. Not all issue are resolvable as the data the connector
