@@ -99,18 +99,21 @@ can provide is limitted by what Snowflake keeps track of in its audit logs.
 delay of 1 hour between SQL execution and the data being reflected in the tables and in Guardium as a result.
 
 ## FAQ
-**Q:** Will my policies and reports work the same way?
-**A:** Yes, with a few exceptions. As with any universal connector plugin, policy rules related to logging 
+### Will my policies and reports work the same way?
+
+Yes, with a few exceptions. As with any universal connector plugin, policy rules related to logging 
 behave the same as if the data was coming from an STAP. The same goes with reporting. That said, extrusion
 rules do not work as there is no returned data to inspect. Blocking rules (S-GATE/S-TAP terminate) also do 
 not work.
 
-**Q:** Does this work with AWS, Azure, and GCP instances of Snowflake?
-**A:** Yes. The schema and connection behaviour for Snowflake are the same across all those cloud service
+
+### Does this work with AWS, Azure, and GCP instances of Snowflake?
+
+Yes. The schema and connection behaviour for Snowflake are the same across all those cloud service
 providers. You may wish to deploy a Guardium collector in the same region as your snowflake instance to
 reduce items such as egress costs.
 
-Have another question? Open an issue in this repo and we'll answer and post it here.
+Have another question? [Open an issue](https://github.com/infoinsights/guardium-snowflake-uc-filter/issues) in this repo and we'll answer and post it here.
 
 
 ## Screenshot
