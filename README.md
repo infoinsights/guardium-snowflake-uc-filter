@@ -98,6 +98,27 @@ can provide is limitted by what Snowflake keeps track of in its audit logs.
 3. We are using the tables in SNOWFLAKE.ACCOUNT_USAGE above. We do that because it is the only way we know of to join SQL data to informaton on client IPs and source programs. Note though because we are using those tables and not the ones in information_schema, there is a 
 delay of 1 hour between SQL execution and the data being reflected in the tables and in Guardium as a result.
 
+## FAQ
+**Q:** Will my policies and reports work the same way?
+**A:** Yes, with a few exceptions. As with any universal connector plugin, policy rules related to logging 
+behave the same as if the data was coming from an STAP. The same goes with reporting. That said, extrusion
+rules do not work as there is no returned data to inspect. Blocking rules (S-GATE/S-TAP terminate) also do 
+not work.
+
+**Q:** Does this work with AWS, Azure, and GCP instances of Snowflake?
+**A:** Yes. The schema and connection behaviour for Snowflake are the same across all those cloud service
+providers. You may wish to deploy a Guardium collector in the same region as your snowflake instance to
+reduce items such as egress costs.
+
+Have another question? Open an issue in this repo and we'll answer and post it here.
+
+
+## Screenshot
+Here's a screenshot of a report showing Snowflake data in Guardium data protection:
+
+![Viewing Snowflake data in Guardium Data Protection](Screenshot%202022-12-08%20155256.png)
+
+
 Author: John Haldeman
 
 
