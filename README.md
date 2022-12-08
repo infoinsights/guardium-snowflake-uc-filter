@@ -119,7 +119,7 @@ Have another question? [Open an issue](https://github.com/infoinsights/guardium-
 ## Screenshot
 Here's a screenshot of a report showing Snowflake data in Guardium data protection:
 
-![Viewing Snowflake data in Guardium Data Protection](Screenshot%202022-12-08%20155256.png)
+![Viewing Snowflake data in Guardium Data Protection](Screenshot%202022-12-08%20160128.png)
 
 
 Author: John Haldeman
