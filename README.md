@@ -38,7 +38,7 @@ the JDBC driver. It is used later to keep track of the :sql_last_value parameter
 Configure a JDBC Logstash **input** source using this as a template. Replace all 
 values located in angle brackets.
 
-**NOTE**: The user you defined below in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
+**NOTE**: The user you define below in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
 You are encouraged to test this first by replacing :sql_last_value with a string literal and running
 this against Snowflake with the user in question. In particular, make sure the user in question [has access
 to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-account-usage-for-other-roles).
