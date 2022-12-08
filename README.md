@@ -43,7 +43,7 @@ You are encouraged to test this first by replacing :sql_last_value with a string
 this against Snowflake with the user in question. In particular, make sure the user in question [has access
 to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-snowflake-database-usage-for-other-roles).
 
-```
+```sql
 use role accountadmin;
 
 grant imported privileges on database snowflake to role sysadmin;
