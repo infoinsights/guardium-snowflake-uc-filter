@@ -41,11 +41,17 @@ values located in angle brackets.
 **NOTE**: The user you define below in the jdbc_user parameter must have enough permissions to execute the SQL in statement area.
 You are encouraged to test this first by replacing :sql_last_value with a string literal and running
 this against Snowflake with the user in question. In particular, make sure the user in question [has access
-to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-account-usage-for-other-roles).
+to the "SNOWFLAKE" database](https://docs.snowflake.com/en/sql-reference/account-usage.html#enabling-snowflake-database-usage-for-other-roles).
 
 ```
 use role accountadmin;
-grant imported privileges on database snowflake to role <role>;
+
+grant imported privileges on database snowflake to role sysadmin;
+grant imported privileges on database snowflake to role customrole1;
+
+use role customrole1;
+
+select database_name, database_owner from snowflake.account_usage.databases;
 ```
 
 ```ruby
