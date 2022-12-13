@@ -54,6 +54,8 @@ use role customrole1;
 select database_name, database_owner from snowflake.account_usage.databases;
 ```
 
+The “type” fields should match in the input and the filter configuration sections. This field should be unique for every individual connector added.
+
 ```ruby
 jdbc {
     type => "snowflake"
