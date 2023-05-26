@@ -1,5 +1,7 @@
 # ** Retired **
-IBM has taken over maintenance of this project. To get the latest plugin and documentation, access the IBM controlled repository at the link below:
+IBM has taken over maintenance of this project. To get the latest plugin and documentation regarding the Guardium UC for Snowflake, 
+access the IBM controlled repository at this link:
+
 https://github.com/IBM/universal-connectors/tree/main/filter-plugin/logstash-filter-snowflake-guardium
 
 # Guardium Snowflake Connector
