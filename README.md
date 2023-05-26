@@ -1,3 +1,7 @@
+# ** Retired **
+IBM has taken over maintenance of this project. To get the latest plugin and documentation, access the IBM controlled repository at the link below:
+https://github.com/IBM/universal-connectors/tree/main/filter-plugin/logstash-filter-snowflake-guardium
+
 # Guardium Snowflake Connector
 A Guardium Universal Connector filter plugin for Snowflake. The connector allows people to
 monitor SQL occuring in their Snowflake environments by providing a feed of events to
